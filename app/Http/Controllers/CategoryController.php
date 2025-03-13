@@ -4,16 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
-        return view('categories.index', compact('categories'));
+        // $categories = Category::all();
+        // return view('categories.index', compact('categories'));
+
+        if ($request->ajax()) {
+            $categories = Category::select(['id', 'name']);
+            return DataTables::of($categories)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    return '
+                        <a href="' . route('categories.edit', $row->id) . '" class="px-2 py-1 bg-yellow-500 text-white rounded">Edit</a>
+                        <form action="' . route('categories.destroy', $row->id) . '" method="POST" class="inline-block" onsubmit="return confirm(\'Apakah Anda yakin?\')">
+                            ' . csrf_field() . '
+                            ' . method_field("DELETE") . '
+                            <button type="submit" class="px-2 py-1 bg-red-500 text-white rounded">Hapus</button>
+                        </form>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        return view('categories.index');
     }
 
     /**
