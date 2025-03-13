@@ -1,21 +1,39 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Tambah Brand') }}
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Brand') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-6">
-                <form action="{{ route('brands.store') }}" method="POST">
-                    @csrf
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-white">Nama Brand</label>
-                        <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300 dark:bg-gray-700 dark:text-white" required>
-                    </div>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Simpan</button>
-                </form>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    <section>
+                        <header>
+                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                                {{ __('Tambah Brand') }}
+                            </h2>
+
+                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                {{ __('Lengkapi informasi brand.') }}
+                            </p>
+                        </header>
+
+                        <form method="post" action="{{ route('brands.store') }}" class="mt-6 space-y-6">
+                            @csrf
+                            <div>
+                                <x-input-label for="name" :value="__('Name')" />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+                                    required autofocus autocomplete="name" />
+                                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <x-primary-button>{{ __('Save') }}</x-primary-button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
